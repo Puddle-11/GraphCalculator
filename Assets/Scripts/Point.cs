@@ -1,14 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class Point : MonoBehaviour
 {
     public bool hover;
-    private Vector2 Offset;
+    private Vector3 Offset;
     private float timer;
     private bool runningTimer;
     public int index;
+    [SerializeField] private TextMeshPro textElement;
     public void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.tag == "Mouse")
@@ -30,6 +32,8 @@ public class Point : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        Offset.z = index;
+        textElement.text = index.ToString();
         if (runningTimer)
         {
             timer += Time.deltaTime;
@@ -39,6 +43,7 @@ public class Point : MonoBehaviour
             runningTimer = true;
             PointManager.ChangeSelected(gameObject);
             Offset = transform.position - CameraManager.Camref.Mouse.transform.position;
+
 
         }
         if (Input.GetMouseButtonUp(0))
@@ -68,7 +73,7 @@ public class Point : MonoBehaviour
         
         if (PointManager.currentlySelectedPoint == gameObject)
         {
-            transform.position = CameraManager.mouseWorldPos + Offset;
+            transform.position = (Vector3)CameraManager.mouseWorldPos + Offset;
         }
 
     }

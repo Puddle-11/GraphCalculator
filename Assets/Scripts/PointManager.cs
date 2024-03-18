@@ -1,6 +1,7 @@
 using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PointManager : MonoBehaviour
@@ -16,6 +17,7 @@ public class PointManager : MonoBehaviour
     public GameObject pointPrefab;
     public float clickTime;
     public GameObject CurrentSelect;
+    public int MaxPoints;
     public void Awake()
     {
         if(PMRef == null)
@@ -41,12 +43,16 @@ public class PointManager : MonoBehaviour
         }
         allLines.Clear();
         lineMatrix.Clear();
+        Matrix.MatrixRef.UpdateMatrix(0);
+
     }
     private void Update()
     {
         if(Input.GetMouseButtonUp(0) && drawingLine == true)
         {
-            EndLine(currentlySelectedPoint);
+      
+                EndLine(currentlySelectedPoint);
+          
         }
         CurrentSelect = currentlySelectedPoint;
     }
@@ -96,26 +102,33 @@ public class PointManager : MonoBehaviour
         {
             CancelLine();
         }
+        Matrix.MatrixRef.UpdateMatrix(allPoints.Count, lineMatrix.ToArray());
+
         StartCoroutine(DrawLineDelay());
 
     }
     public void EndLine(GameObject _currentPoint)
     {
-        if (_currentPoint == null) 
+        if (_currentPoint == null|| _currentPoint.transform == currentTempLine.GetComponent<Line>().L_startTransform) 
         { 
             CancelLine();
             return;
         }
-
+        
         EndLine(_currentPoint.GetComponent<Point>().index);
     }
     public void AddPoint()
     {
-       GameObject temp = Instantiate(pointPrefab, Vector2.zero, Quaternion.identity, gameObject.transform);
-        allPoints.Add(temp);
-        temp.GetComponent<Point>().index = allPoints.Count - 1;
-    }
-    public void RemovePoint(GameObject _point)
+        if (allPoints.Count < MaxPoints)
+        {
+            GameObject temp = Instantiate(pointPrefab, Vector2.zero, Quaternion.identity, gameObject.transform);
+            allPoints.Add(temp);
+            temp.GetComponent<Point>().index = allPoints.Count - 1;
+            temp.transform.position = new Vector3(temp.transform.position.x, temp.transform.position.y, temp.GetComponent<Point>().index);
+            Matrix.MatrixRef.UpdateMatrix(allPoints.Count, lineMatrix.ToArray());
+        }
+        }
+        public void RemovePoint(GameObject _point)
     {
         allPoints.Remove(_point);
     }
