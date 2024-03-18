@@ -6,7 +6,7 @@ Graph Visualizer
 
 =================================================
 
-DISCLAIMER: Please excuse the horrendous code. this was made over the course of 2.5 hours. I will continue to update and optimize this, if you would like to help optimize feel free to email me at Puddleglumcat@gmail.com.
+DISCLAIMER: Please excuse the horrendous code. this was made over the course of 4 hours. I will continue to update and optimize this, if you would like to help optimize feel free to email me at Puddleglumcat@gmail.com.
 
 Instructions:
 
